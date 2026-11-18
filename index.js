@@ -106,6 +106,37 @@ app.get("/api/events/:id",async(req, res)=>{
   }
 })
 
+// NEW: POST API to Join an Event[cite: 5]
+app.post("/api/join", async (req, res) => {
+  try {
+    const joinData = req.body;
+    const db = client.db("socialeventDB");
+    
+    // Save the joined event data into a new collection called "joinedEvents"[cite: 5]
+    const result = await db.collection("joinedEvents").insertOne(joinData);
+    
+    res.status(201).send(result);
+  } catch (error) {
+    console.error("Error joining event:", error);
+    res.status(500).send({ message: "Failed to join event" });
+  }
+});
+
+// NEW: GET API to fetch events joined by a specific user
+app.get("/api/joined-events/:email", async (req, res) => {
+  try {
+    const userEmail = req.params.email;
+    const db = client.db("socialeventDB");
+    
+    // Find all events where the participantEmail matches the requested email
+    const myJoinedEvents = await db.collection("joinedEvents").find({ participantEmail: userEmail }).toArray();
+    
+    res.status(200).send(myJoinedEvents);
+  } catch (error) {
+    console.error("Error fetching joined events:", error);
+    res.status(500).send({ message: "Failed to fetch joined events" });
+  }
+});
 
 
 
