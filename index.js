@@ -74,6 +74,20 @@ app.post("/api/events", async (req, res) => {
   }
 });
 
+//Get upcomming events
+app.get("/api/events",async(req,res)=>{
+  try {
+    const db = client.db("socialeventDB");
+    const eventsCollection = db.collection("events");
+
+    const events = await eventsCollection.find({}).toArray();
+    res.status(200).send(events);
+  } catch(error){
+    console.error("Error fetching events:", error);
+    res.status(500).send({message:"Failed to fetch events"}); 
+  }
+})
+
 
 
 
