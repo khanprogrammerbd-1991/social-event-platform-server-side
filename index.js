@@ -55,6 +55,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to the Social Event API!");
 });
 
+
 // NEW: POST API to Create an Event
 app.post("/api/events", async (req, res) => {
   try {
@@ -106,6 +107,7 @@ app.get("/api/events/:id",async(req, res)=>{
   }
 })
 
+
 // NEW: POST API to Join an Event[cite: 5]
 app.post("/api/join", async (req, res) => {
   try {
@@ -122,6 +124,7 @@ app.post("/api/join", async (req, res) => {
   }
 });
 
+
 // NEW: GET API to fetch events joined by a specific user
 app.get("/api/joined-events/:email", async (req, res) => {
   try {
@@ -137,6 +140,7 @@ app.get("/api/joined-events/:email", async (req, res) => {
     res.status(500).send({ message: "Failed to fetch joined events" });
   }
 });
+
 
 // NEW: GET API to fetch events created by a specific user
 app.get("/api/my-events/:email", async (req, res) => {
@@ -196,7 +200,6 @@ app.patch("/api/events/:id", async (req, res) => {
     res.status(500).send({ message: "Failed to update event" });
   }
 });
-
 
 
 
