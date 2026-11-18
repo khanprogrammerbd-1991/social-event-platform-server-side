@@ -88,6 +88,24 @@ app.get("/api/events",async(req,res)=>{
   }
 })
 
+//Get event by id
+app.get("/api/events/:id",async(req, res)=>{
+  try {
+    const eventId = req.params.id;
+    const db = client.db("socialeventDB");
+    const eventsCollection = db.collection("events");
+    const event = await eventsCollection.findOne({_id: new ObjectId(eventId)});
+    if(event){
+      res.status(200).send(event);
+    } else {
+      res.status(404).send({message:"Event not found"});
+    }
+  } catch(error){
+    console.error("Error fetching event by ID:", error);
+    res.status(500).send({message:"Failed to fetch event by ID"});
+  }
+})
+
 
 
 
