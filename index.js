@@ -154,6 +154,49 @@ app.get("/api/my-events/:email", async (req, res) => {
   }
 });
 
+// NEW: DELETE API to remove an event
+app.delete("/api/events/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const db = client.db("socialeventDB");
+    
+    const result = await db.collection("events").deleteOne({ _id: new ObjectId(id) });
+    
+    if (result.deletedCount === 1) {
+      res.status(200).send({ message: "Event deleted successfully" });
+    } else {
+      res.status(404).send({ message: "Event not found" });
+    }
+  } catch (error) {
+    console.error("Error deleting event:", error);
+    res.status(500).send({ message: "Failed to delete event" });
+  }
+});
+
+// NEW: PATCH API to update an existing event
+app.patch("/api/events/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updatedData = req.body;
+    const db = client.db("socialeventDB");
+    
+    // We use $set to tell MongoDB to only update the provided fields
+    const result = await db.collection("events").updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updatedData }
+    );
+    
+    if (result.matchedCount === 1) {
+      res.status(200).send({ message: "Event updated successfully" });
+    } else {
+      res.status(404).send({ message: "Event not found" });
+    }
+  } catch (error) {
+    console.error("Error updating event:", error);
+    res.status(500).send({ message: "Failed to update event" });
+  }
+});
+
 
 
 
