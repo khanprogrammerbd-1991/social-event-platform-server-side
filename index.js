@@ -55,6 +55,25 @@ app.get("/", (req, res) => {
   res.send("Welcome to the Social Event API!");
 });
 
+// NEW: POST API to Create an Event
+app.post("/api/events", async (req, res) => {
+  try {
+    const eventData = req.body;
+    
+    // Access the database and collection
+    const db = client.db("socialeventDB");
+    const eventsCollection = db.collection("events");
+
+    // Insert the new event into MongoDB
+    const result = await eventsCollection.insertOne(eventData);
+    
+    res.status(201).send(result);
+  } catch (error) {
+    console.error("Error creating event:", error);
+    res.status(500).send({ message: "Failed to create event" });
+  }
+});
+
 
 
 
