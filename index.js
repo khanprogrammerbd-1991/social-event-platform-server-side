@@ -138,6 +138,22 @@ app.get("/api/joined-events/:email", async (req, res) => {
   }
 });
 
+// NEW: GET API to fetch events created by a specific user
+app.get("/api/my-events/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const db = client.db("socialeventDB");
+    
+    // Find events where the creator's email matches the requested email
+    const myEvents = await db.collection("events").find({ userEmail: email }).toArray();
+    
+    res.status(200).send(myEvents);
+  } catch (error) {
+    console.error("Error fetching user's events:", error);
+    res.status(500).send({ message: "Failed to fetch events" });
+  }
+});
+
 
 
 
